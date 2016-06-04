@@ -1,0 +1,60 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package chapter8;
+
+import java.security.KeyStore;
+
+/**
+ * Basic example of use of Keystore.Builder to create an object that can
+ * be used recover a private key.
+ * @author fran
+ */
+public class JCEKSStoreBuilderExample implements java.io.Serializable {
+    private static final long serialVersionUID = -1L;
+    private static final String _NAME = JCEKSStoreBuilderExample.class.getName();
+
+    /*------------------------------------------------------------------------*/
+    /*                          Metodos Privados                              */
+    /*------------------------------------------------------------------------*/
+
+    /*------------------------------------------------------------------------*/
+    /*                          Default Access                                */
+    /*------------------------------------------------------------------------*/
+
+    /*------------------------------------------------------------------------*/
+    /*                          Metodos Protegidos                            */
+    /*------------------------------------------------------------------------*/
+
+    /*------------------------------------------------------------------------*/
+    /*                            Constructores                               */
+    /*------------------------------------------------------------------------*/
+    /**
+     * Constructor por defecto.
+     */
+    public JCEKSStoreBuilderExample() {}
+
+    /*------------------------------------------------------------------------*/
+    /*                          Metodos Publicos                              */
+    /*------------------------------------------------------------------------*/
+    public static void main(String[] args) throws Exception {
+        KeyStore store = JCEKSStoreEntryExample.createKeyStore();
+
+        char[] password = "storePassword".toCharArray();
+
+        //1.- Create the builder
+        KeyStore.Builder builder = KeyStore.Builder.newInstance(store, new KeyStore.PasswordProtection(JCEKSStoreEntryExample.keyPassword));
+
+        //2.- Use the builder to recover the KeyStore and obtain the key
+        store = builder.getKeyStore();
+
+        KeyStore.ProtectionParameter param = builder.getProtectionParameter(Utils.END_ENTITY_ALIAS);
+
+        KeyStore.Entry entry = store.getEntry(Utils.END_ENTITY_ALIAS, param);
+
+        System.out.println("Recovered " + entry.getClass());
+    }
+}
